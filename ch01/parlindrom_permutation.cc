@@ -16,6 +16,7 @@ bool isPermutationOfPallindrome(const string &input) {
       return c - 'a';
     else if (std::isupper(c))
       return c - 'A';
+    // ignore special char
     return -1;
   };
 
@@ -43,6 +44,39 @@ bool isPermutationOfPallindrome(const string &input) {
   return true;
 }
 
+int toggle(int bit, int index) {
+  int mask = 1 << index;
+  if ((bit & mask) == 0) {
+    bit |= mask;
+  } else {
+    bit &= ~mask;
+  }
+
+  return bit;
+}
+
+bool isPermutationOfPallindrome2(const string &input) {
+  int bit = 0;
+  int id = 0;
+  auto idx = [](char c) -> int {
+    if (std::islower(c))
+      return c - 'a';
+    else if (std::isupper(c))
+      return c - 'A';
+    // ignore special char
+    return -1;
+  };
+
+  for (auto &c : input) {
+    id = idx(c);
+    if (id < 0)
+      continue;
+    bit = toggle(bit, id);
+  }
+
+  return bit == 0 || ((bit & (bit - 1)) == 0);
+}
+
 int main()
 {
 
@@ -50,5 +84,6 @@ int main()
   std::cout << "Does \"" << str << "\"  has a string whose permutation is a pallindrome? "
            << "( 1 for true, 0 for false ) : " << std::endl;
   std::cout << "Approach 1:" << isPermutationOfPallindrome(str) << std::endl;
+  std::cout << "Approach 1:" << isPermutationOfPallindrome2(str) << std::endl;
   return 0;
 }
